@@ -1,4 +1,4 @@
-package com.demo.nisum.common;
+package com.demo.nisum.common.exception;
 
 public class ErrorMessage {
 	private String mensaje;
