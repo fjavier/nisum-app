@@ -14,109 +14,35 @@ Aplicación demo para registro de usuarios
 * Desde su terminal favorita ubicarse en la raiz del proyecto.
 * Ejecutar el comando mvn spring-boot:run 
 
-## Pruebas desde postman
+### Documentacion del API
+https://documenter.getpostman.com/view/3496702/UVXona7G#6c33bc35-4938-4079-b3f6-aa5c71d50a3c
 
-* Crear un nuevo request de tipo POST a la url: localhost:8080/users/signup
-* En la sección Body seleccionar el tipo raw y al final de las opciones el tipo JSON.
-* En el campo de texto adjuntar la siguiente JSON:
- 
+## Importar la colección de request del API desde postman 
 
-```json
-{
-    "name": "Francisco",
-    "email": "francisco.briceno@dominio.com",
-    "password": "satelite",
-    "phones": [
-        {
-            "number": "1234567",
-            "citycode": "1",
-            "countrycode": "57"
-        }
-    ]
-}
-```
+De esta manera usted podra probar el API ya con datos pre-cargados.
 
-### Generar error de validacion de email
+- Seleccionar la opción importar
+- Seleccionar la opción link
+- Pegar el link: https://www.postman.com/collections/3b5ac7455d1e312cd86b
+- Click en Siguient
+- Click en importar
 
-* Enviar el mismo body 2 veces o modificar el body repitiendo el correo.
+### Resultado 
+![image](https://user-images.githubusercontent.com/3578372/150606103-93d321f0-293d-4e05-a4cd-523d6ab94fd6.png)
 
-### Validacion de campos:
+## Consideraciones del API
 
-* Enviar el siguiente json, este no contiene el nombre 
-
-```json
-{
-    "email": "francisco.briceno@dominio.com",
-    "password": "satelite",
-    "phones": [
-        {
-            "number": "1234567",
-            "citycode": "1",
-            "countrycode": "57"
-        }
-    ]
-}
-```
-> respuesta esperada:
-
-```json
-{
-    "mensaje": "campo name  no debe estar vacío"
-}
-```
-
-## Escenario exitoso. 
-
-> Para el caso del escenario exitoso la respuesta deberia ser:
-
-```json
-{
-    "id": "12dc3001-c7b3-470d-b909-f463d9550f0c",
-    "name": "Francisco",
-    "email": "francisco.briceno2@dominio.com",
-    "created": "2022-01-21T12:00:59.909181",
-    "modified": null,
-    "lastLogin": "2022-01-21T12:00:59.90167",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcmFuY2lzY28uYnJpY2VubzJAZG9taW5pby5jb20iLCJpYXQiOjE2NDI3ODgwNTksImV4cCI6MTY0Mjc4ODM1OX0.hoA5rSEHIxjV02iEbzJqhsfN0DNO5FKmj6ODOCzdLm8",
-    "isActive": true
-}
-```
-
-## Visualizar todos los usuarios:
-
-Para ver todos los usuarios registrado usted debera copiar el token devuelto en la respuesta del escenario exitoso, crear un nuevo request de tipo get, apuntando a la url localhost:8080/users/
-
-En el tab header, agregar en la columna key la palabra `Authorization` en la columna value agregar el valor:
-`Bearer token` donde Token es el token generado por la aplicacion cuando se registro.
-
-La respuesta esperada es: 
-
-```json
-[
-    {
-        "id": "12dc3001-c7b3-470d-b909-f463d9550f0c",
-        "name": "Francisco",
-        "email": "francisco.briceno2@dominio.com",
-        "created": "2022-01-21T12:00:59.909181",
-        "modified": "2022-01-21T12:07:25.859548",
-        "lastLogin": "2022-01-21T12:07:25.859571",
-        "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcmFuY2lzY28uYnJpY2VubzJAZG9taW5pby5jb20iLCJpYXQiOjE2NDI3ODg0NDUsImV4cCI6MTY0Mjc4ODc0NX0.Cv1XYbDDYL5XnzgJwHSIaHzn-_UEHhI2mO6fr5RMy4A",
-        "isActive": true
-    }
-]
-```
-El token expira a los 5 minutos.
+- El metodo para obtener todos los usuarios requiere autenticación, para ello debera reemplazar el token que viene por defecto por el generado al momento de hacer el signup del usuario.
+- Para autenticarse nuevamente con un usuario creado, usted tendra que generar un nuevo token. para esto vaya al request llamado Signin e ingresar las credenciales del usuario que creo previamente.
+- Usted podra revisar la documentaciòn del swagger en el siguiente link: http://localhost:8080/swagger-ui.html
+- Usted podra ingresar a la base de datos desde el siguiente link: http://localhost:8080/h2-console con las credenciales 
+-  user: sa
+-  password: 123qweasd
 
 ## Generar nuevo token
 
 para generar un nuevo token crear un nuevo request de tipo Post que apunte a localhost:8080/users/signin en el apartado Body asegurarse que sea de tipo JSON, en este debera ir el email y el password con el que se registro.
 
-```json
-{
-    "email":"francisco.briceno2@dominio.com",
-    "password":"satelite"
-}
-```
 
 ## Diagrama de secuencia
 ![Nisum Sequence Diagram](https://user-images.githubusercontent.com/3578372/150602157-2fe1866e-3568-4613-b41f-e2c9d46e7de4.png)
