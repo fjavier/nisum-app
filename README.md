@@ -117,3 +117,7 @@ para generar un nuevo token crear un nuevo request de tipo Post que apunte a loc
     "password":"satelite"
 }
 ```
+
+## Diagrama de secuencia
+![Nisum Sequence Diagram](https://user-images.githubusercontent.com/3578372/150602157-2fe1866e-3568-4613-b41f-e2c9d46e7de4.png)
+
