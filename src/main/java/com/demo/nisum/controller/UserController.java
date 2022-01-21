@@ -1,12 +1,16 @@
 package com.demo.nisum.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +18,7 @@ import com.demo.nisum.common.exception.BusinessLogicException;
 import com.demo.nisum.service.UserService;
 
 @RestController()
+@RequestMapping("/users")
 public class UserController {
 
 	private UserService userService;
@@ -23,7 +28,7 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@PostMapping(path = "users", 
+	@PostMapping(path = "/signup", 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -32,5 +37,11 @@ public class UserController {
 		 return this.userService.create(user)
 				 .orElseThrow(() -> new BusinessLogicException("email ya se encuentra registrado"));
 		
+	}
+	
+	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<UserDetailDto> getAll(){
+		return this.userService.findAll();
 	}
 }

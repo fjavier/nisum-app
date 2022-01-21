@@ -12,14 +12,19 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 /**
  * @author cisco505
@@ -57,6 +62,14 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false)
 	private String password;
 	private String token;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns
+            = @JoinColumn(name = "user_id",
+            referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",
+                    referencedColumnName = "id"))
+    private List<RoleEntity> roles;
 	
 	private LocalDateTime lastLogin;
 	
@@ -195,9 +208,19 @@ public class UserEntity implements Serializable {
 	 */
 	public void setLastLogin(LocalDateTime lastLogin) {
 		this.lastLogin = lastLogin;
+	}
+	/**
+	 * @return the roles
+	 */
+	public List<RoleEntity> getRoles() {
+		return roles;
+	}
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<RoleEntity> roles) {
+		this.roles = roles;
 	}	
-	
-	
 	
 	
 }
