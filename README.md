@@ -39,10 +39,6 @@ De esta manera usted podra probar el API ya con datos pre-cargados.
 -  user: sa
 -  password: 123qweasd
 
-## Generar nuevo token
-
-para generar un nuevo token crear un nuevo request de tipo Post que apunte a localhost:8080/users/signin en el apartado Body asegurarse que sea de tipo JSON, en este debera ir el email y el password con el que se registro.
-
 
 ## Diagrama de secuencia
 ![Nisum Sequence Diagram](https://user-images.githubusercontent.com/3578372/150602157-2fe1866e-3568-4613-b41f-e2c9d46e7de4.png)
