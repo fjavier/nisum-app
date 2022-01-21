@@ -11,7 +11,6 @@ import io.jsonwebtoken.*;
 
 @Component
 public class JwtTokenProvider {
-	 private JwtParser parser;
 	private String secretKey;
 	private long expirationTime;
 	

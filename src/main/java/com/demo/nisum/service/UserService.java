@@ -7,9 +7,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.demo.nisum.common.exception.BusinessLogicException;
 import com.demo.nisum.controller.UserDetailDto;
 import com.demo.nisum.controller.UserDto;
 import com.demo.nisum.domain.PhoneEntity;
@@ -18,6 +22,7 @@ import com.demo.nisum.domain.UserEntity;
 import com.demo.nisum.repository.RoleRepository;
 import com.demo.nisum.repository.UserRepository;
 import com.demo.nisum.security.JwtTokenProvider;
+
 
 @Service
 public class UserService {
@@ -30,22 +35,45 @@ public class UserService {
 	
 	private JwtTokenProvider tokenProvider;
 	
+	private AuthenticationManager authenticationManager;
+	
 	@Autowired
-	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+	public UserService(UserRepository userRepository, 
+			RoleRepository roleRepository, 
+			PasswordEncoder passwordEncoder, 
+			JwtTokenProvider tokenProvider, 
+			AuthenticationManager authenticationManager) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenProvider = tokenProvider;
+		this.authenticationManager = authenticationManager;
 	}
 	
+	 public Optional<String> signin(String email, String password) {
+	        Optional<String> token = Optional.empty();
+	        Optional<UserEntity> user = userRepository.findByEmail(email);
+	       
+	        if (user.isPresent()) {
+	            try {
+	                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+	                token = Optional.of(createToken(email));
+	                user.get().setModified(LocalDateTime.now());
+	                user.get().setLastLogin(LocalDateTime.now());
+	                user.get().setToken(token.get());
+	                user.get().setIsActive(true);
+	                userRepository.save(user.get());
+	            } catch (AuthenticationException e){
+	            	throw new BusinessLogicException(e.getMessage());
+	            }
+	        }
+	        return token;
+	    }
 	
 	public Optional<UserDetailDto> create(UserDto userDto) {
-		if(!userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-			UserEntity userEntity = saveUser(userDto);
-			UserDetailDto detail = convert(userEntity);
-			return Optional.of(detail);
-		}
-		return Optional.empty();
+		UserEntity userEntity = saveUser(userDto);
+		UserDetailDto detail = convert(userEntity);
+		return Optional.of(detail);
 	}
 
 

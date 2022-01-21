@@ -32,9 +32,8 @@ public class UserController {
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public UserDetailDto create(@RequestBody @Valid UserDto user) {
-		
-		 return this.userService.create(user)
+	public UserDetailDto signup(@RequestBody @Valid UserDto user) {
+		return this.userService.create(user)
 				 .orElseThrow(() -> new BusinessLogicException("email ya se encuentra registrado"));
 		
 	}
@@ -43,5 +42,12 @@ public class UserController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<UserDetailDto> getAll(){
 		return this.userService.findAll();
+	}
+	
+	@PostMapping(path = "/signin")
+	@ResponseStatus(code = HttpStatus.OK)
+	public String signin(@RequestBody @Valid LoginDto loginDto) {
+		return this.userService.signin(loginDto.getEmail(), loginDto.getPassword()).orElseThrow(
+				()->new BusinessLogicException("Credenciales invalidas"));
 	}
 }

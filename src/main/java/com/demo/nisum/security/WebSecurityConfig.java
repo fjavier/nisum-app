@@ -3,6 +3,7 @@ package com.demo.nisum.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -22,7 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		// Entry points
         http.authorizeRequests()
-                .antMatchers("/users/signup").permitAll()
+        		.antMatchers("/users/signup").permitAll()
+        		.antMatchers("/users/signin").permitAll()
                 // Disallow everything else..
                 .anyRequest().authenticated();
 
@@ -37,12 +39,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/h2-console/**");
+		web.ignoring().antMatchers("/h2-console/**")
+		.antMatchers("/v2/api-docs")
+        .antMatchers("/swagger-resources/**")
+        .antMatchers("/swagger-ui.html")
+        .antMatchers("/configuration/**")
+        .antMatchers("/webjars/**")
+        .antMatchers("/public");;
 	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder(12);
+	}
+	
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+	    return super.authenticationManagerBean();
 	}
 
 }
