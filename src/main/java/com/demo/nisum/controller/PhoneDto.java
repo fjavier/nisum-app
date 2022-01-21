@@ -1,9 +1,14 @@
 package com.demo.nisum.controller;
 
+import javax.validation.constraints.NotEmpty;
+
 public class PhoneDto {
 	
+	@NotEmpty
 	private String number;
+	@NotEmpty
 	private String citycode;
+	@NotEmpty
 	private String countrycode;
 	/**
 	 * @return the number
