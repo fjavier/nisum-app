@@ -89,7 +89,17 @@ public class UserService {
 		detail.setIsActive(userEntity.getIsActive());
 		return detail;
 	}
-
+	
+	public String createToken(String email) {
+		return tokenProvider.createToken(email);
+	}
+	
+	public List<UserDetailDto> findAll() {
+		List<UserDetailDto> users = userRepository.findAll().stream().map(entity -> {
+			return convert(entity);
+		}).collect(Collectors.toList());
+		return users;
+	}
 
 	private UserEntity saveUser(UserDto userDto) {
 		List<PhoneEntity> phones = userDto.getPhones().stream().map(phone->{
@@ -117,14 +127,5 @@ public class UserService {
 		return userEntity;
 	}
 	
-	public String createToken(String email) {
-		return tokenProvider.createToken(email);
-	}
 	
-	public List<UserDetailDto> findAll() {
-		List<UserDetailDto> users = userRepository.findAll().stream().map(entity -> {
-			return convert(entity);
-		}).collect(Collectors.toList());
-		return users;
-	}
 }
