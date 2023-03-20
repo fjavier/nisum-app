@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	public Optional<String> signin(String email, String password) {
 	        Optional<String> token = Optional.empty();
 	        Optional<UserEntity> user = userRepository.findByEmail(email);
-	       
+
 	        if (user.isPresent()) {
 	            try {
 	                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -78,9 +78,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public List<UserDetailDto> findAll() {
-		List<UserDetailDto> users = userRepository.findAll().stream().map(entity -> {
-			return convert(entity);
-		}).collect(Collectors.toList());
+		List<UserDetailDto> users = userRepository.findAll().stream().map(entity -> convert(entity))
+				.collect(Collectors.toList());
 		return users;
 	}
 

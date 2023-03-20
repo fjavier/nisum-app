@@ -19,7 +19,7 @@ public class UserDto {
 	@NotEmpty
 	private String name;
 	@NotEmpty
-	@Email(regexp = ".+@.+\\..+")
+	@Email(regexp = ".+@.+\\..+", message = "El email debe tener un formato valido")
 	private String email;
 	@NotEmpty
 	private String password;
