@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,26 +12,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.demo.nisum.mapper.UserDetailMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
 import com.demo.nisum.common.exception.BusinessLogicException;
-import com.demo.nisum.controller.UserDetailDto;
+import com.demo.nisum.dto.UserDetailDto;
 import com.demo.nisum.domain.UserEntity;
 import com.demo.nisum.repository.RoleRepository;
 import com.demo.nisum.repository.UserRepository;
 import com.demo.nisum.security.JwtTokenProvider;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserServiceImplTest {
 	
 	private static final String BUSINESS_LOGIC_EXCEPTION_DETAIL = "SOME EXCEPTION";
 
@@ -42,7 +41,7 @@ class UserServiceTest {
 	private static final String USER = "francisco@briceno.com";
 
 	@InjectMocks
-	private UserService userService;
+	private UserServiceImpl userService;
 	
 	@Mock
 	private UserRepository userRepository;
@@ -58,12 +57,14 @@ class UserServiceTest {
 	
 	@Mock
 	private AuthenticationManager authenticationManager;
+
+	private final UserDetailMapper userDetailMapper = Mappers.getMapper(UserDetailMapper.class);
 	
 	private static final String TOKEN = "123213546564645454564adfasdfasdf654asdfasdfasdf798asdf";
 	
 	@BeforeEach
 	void init() {
-		userService = new UserService(userRepository, roleRepository, passwordEncoder, tokenProvider, authenticationManager) {
+		userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder, tokenProvider, authenticationManager, userDetailMapper) {
 
 			@Override
 			public String createToken(String email) {

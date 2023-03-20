@@ -20,6 +20,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -30,6 +34,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author cisco505
  *
  */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements Serializable {
@@ -77,152 +85,4 @@ public class UserEntity implements Serializable {
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PhoneEntity> phones;
-	
-	/**
-	 * @return the id
-	 */
-	public UUID getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	/**
-	 * @return the created
-	 */
-	public LocalDateTime getCreated() {
-		return created;
-	}
-	/**
-	 * @param created the created to set
-	 */
-	public void setCreated(LocalDateTime created) {
-		this.created = created;
-	}
-	/**
-	 * @return the modified
-	 */
-	public LocalDateTime getModified() {
-		return modified;
-	}
-	/**
-	 * @param modified the modified to set
-	 */
-	public void setModified(LocalDateTime modified) {
-		this.modified = modified;
-	}
-	/**
-	 * @return the isActive
-	 */
-	public Boolean getIsActive() {
-		return isActive;
-	}
-	/**
-	 * @param isActive the isActive to set
-	 */
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-		return token;
-	}
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(String token) {
-		this.token = token;
-	}
-	/**
-	 * @return the phones
-	 */
-	public List<PhoneEntity> getPhones() {
-		return phones;
-	}
-	/**
-	 * @param phones the phones to set
-	 */
-	public void setPhones(List<PhoneEntity> phones) {
-		this.phones = phones;
-	}
-	/**
-	 * @return the lastLogin
-	 */
-	public LocalDateTime getLastLogin() {
-		return lastLogin;
-	}
-	/**
-	 * @param lastLogin the lastLogin to set
-	 */
-	public void setLastLogin(LocalDateTime lastLogin) {
-		this.lastLogin = lastLogin;
-	}
-	/**
-	 * @return the roles
-	 */
-	public List<RoleEntity> getRoles() {
-		return roles;
-	}
-	/**
-	 * @param roles the roles to set
-	 */
-	public void setRoles(List<RoleEntity> roles) {
-		this.roles = roles;
-	}	
-	
-	
 }

@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.demo.nisum.dto.LoginDto;
+import com.demo.nisum.dto.UserDetailDto;
+import com.demo.nisum.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,19 +19,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.nisum.common.exception.BusinessLogicException;
-import com.demo.nisum.service.UserService;
+import com.demo.nisum.service.UserServiceImpl;
 
+@RequiredArgsConstructor
 @RestController()
 @RequestMapping("/users")
 public class UserController {
 
-	private UserService userService;
-	
-	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
-	
+	private final UserServiceImpl userService;
+
 	@PostMapping(path = "/signup", 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)

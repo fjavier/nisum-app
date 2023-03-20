@@ -14,6 +14,4 @@ public class NissumAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NissumAppApplication.class, args);
 	}
-
-
 }
