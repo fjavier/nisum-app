@@ -14,15 +14,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,6 +43,29 @@ public class UserControllerTest {
     @BeforeEach
     public void init(){
         userService = Mockito.mock(UserService.class);
+    }
+
+    @Test
+    public void given_invalidPayload_shouldReturnStatus400() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setEmail("cisco@gmail.com");
+        userDto.setPassword("A123456");
+        userDto.setName("Francisco");
+
+        UserDetailDto userDetailDto = new UserDetailDto();
+        userDetailDto.setId(UUID.randomUUID().toString());
+        userDetailDto.setCreated(LocalDateTime.now());
+        userDetailDto.setIsActive(true);
+        userDetailDto.setName("Francisco");
+
+
+        Mockito.when(userService.create(userDto)).thenReturn( Optional.of(userDetailDto));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(jsonPath("$.mensaje").value("campo phones  El nodo teléfono no puede estar vacio"));
     }
 
     @Test

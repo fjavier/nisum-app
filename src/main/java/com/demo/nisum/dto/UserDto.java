@@ -26,7 +26,7 @@ public class UserDto {
 	@PasswordConstraint(message = "El password tiene un formato incorrecto")
 	@NotEmpty
 	private String password;
-	@NotEmpty
+	@NotEmpty(message = "El nodo teléfono no puede estar vacio")
 	private List<PhoneDto> phones;
 	
 }
